@@ -1,6 +1,10 @@
 window.onload = function () {
+    /* setting up the connection link */
     var ws = new WebSocket("ws://localhost:8080/navigationSocket/navdata");
     ws.onmessage = function (event) {
+        /* 
+         * reading data and creating HTML
+        */
         var data = event.data;
         var navElem = document.getElementsByTagName("nav")[0];
            
@@ -14,6 +18,9 @@ window.onload = function () {
             span.innerText = category;
             liElem.appendChild(span);
             
+            /*
+             * reading subcategory for the category
+             */
             if (typeof data[i].subcategory !== "undefined") {
                 var subUlElem = document.createElement("ul");
                 subUlElem.classList = "subcategory-level";
@@ -24,6 +31,9 @@ window.onload = function () {
                     subSpan.innerText = subcats[j].sub;
                     subLiElem.appendChild(subSpan);
                     
+                    /*
+                    * reading subcategory for the sub-category
+                    */
                     if (typeof subcats[j].subcategory !== "undefined") {
                         var subsubUlElem = document.createElement("ul");
                         subsubUlElem.classList = "subsubcategory-level";
@@ -60,25 +70,25 @@ window.onload = function () {
         var subsubcatUl = document.getElementsByClassName('subsubcategory-level');
 
 	for( var i=0; i<subsubcatUl.length; i++ ) {
-		var subsubcatLi = subsubcatUl[i].getElementsByTagName('li');
+            var subsubcatLi = subsubcatUl[i].getElementsByTagName('li');
 
-		for( var j=0; j<subsubcatLi.length; j++ ) {
-			subsubcatLi[j].addEventListener('click', function( e ) {
-				document.title = e.target.innerText;
-				
-				var thisLink = e.target.attributes['data-link'].value;
-				var xmlHttpReq = new XMLHttpRequest();
+            for( var j=0; j<subsubcatLi.length; j++ ) {
+                subsubcatLi[j].addEventListener('click', function( e ) {
+                    document.title = e.target.innerText;
 
-				xmlHttpReq.onreadystatechange = function () {
-                                    if (this.readyState === 4 && this.status === 200) {
-                                        var container = document.getElementById("content");
-                                        container.innerHTML = xmlHttpReq.responseText;
-                                    }
-				}
-				xmlHttpReq.open('GET', thisLink, true);
-				xmlHttpReq.send();
-			});
-		}
+                    var thisLink = e.target.attributes['data-link'].value;
+                    var xmlHttpReq = new XMLHttpRequest();
+
+                    xmlHttpReq.onreadystatechange = function () {
+                        if (this.readyState === 4 && this.status === 200) {
+                            var container = document.getElementById("content");
+                            container.innerHTML = xmlHttpReq.responseText;
+                        }
+                    }
+                    xmlHttpReq.open('GET', thisLink, true);
+                    xmlHttpReq.send();
+                });
+            }
 	}
     };
 };

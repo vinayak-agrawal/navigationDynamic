@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.navigationData;
 
 import java.io.IOException;
@@ -30,10 +25,10 @@ public class navigationData {
     
     @OnOpen
     public void open (Session session) throws JSONException, EncodeException {
-        System.out.println("open connection");
+        System.out.println("Connection is live");
         
-
         try {
+            /* creating the json for the navigation data */
             JSONArray subCatAr = new JSONArray();
             JSONObject subCat = new JSONObject();
             JSONArray subsubCatAr = new JSONArray();
@@ -41,12 +36,14 @@ public class navigationData {
             
             cat.put("category", "Electronics");
             
+            /* sub category for electronics start */
             subCat = new JSONObject();
             subCat.put("sub", "Washing Machines");
             subCatAr.put(subCat);
             
             subCat = new JSONObject();
             subCat.put("sub", "Televisions");
+            /* subcategory for televisions added */
             subsubCat.put("sub", "Sony");
             subsubCat.put("link", "./electronics/televisions/sony.html");
             subsubCatAr.put(subsubCat);
@@ -62,6 +59,7 @@ public class navigationData {
             subsubCat.put("sub", "Hisene");
             subsubCat.put("link", "./electronics/televisions/hisene.html");
             subsubCatAr.put(subsubCat);
+            /* subcategory for television end */
             subCat.put("subcategory", subsubCatAr);
             subCatAr.put(subCat);
             
@@ -83,6 +81,7 @@ public class navigationData {
             
             cat.put("subcategory", subCatAr);
             nav.put(cat);
+            /* sub category for electronics end */
             
             cat = new JSONObject();
             cat.put("category", "Appliances");
@@ -122,7 +121,7 @@ public class navigationData {
     
     @OnClose
     public void close () {
-        System.out.println("close connection");
+        System.out.println("Connection closed");
     }
     
     /**
@@ -131,11 +130,10 @@ public class navigationData {
      */
     @OnError
     public void error (Throwable error) {
-        System.out.println("error connection" + error);
+        System.out.println("Error connection: " + error);
     }
     
     @OnMessage
     public void msg (String message, Session session) {
-        System.out.println("sending data");
     }
 }
